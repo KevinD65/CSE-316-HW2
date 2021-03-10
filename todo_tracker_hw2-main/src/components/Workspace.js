@@ -33,6 +33,9 @@ class Workspace extends Component {
                         <ToDoItem
                             key={toDoListItem.id}
                             toDoListItem={toDoListItem}     // PASS THE ITEM TO THE CHILDREN
+                            EDC={this.props.editDescriptionCallback} //props from App.js
+                            EDDC={this.props.editDueDateCallback}   //props from App.js
+                            ESC={this.props.editStatusCallback}    //props from App.js
                         />))
                     }
                 </div>

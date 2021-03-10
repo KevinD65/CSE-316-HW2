@@ -34,7 +34,7 @@ export class jsTPS_Transaction {
  * state changes for the given application. Note that this TPS is not platform
  * specific as it is programmed in raw JavaScript.
  */
-export default class jsTPS {
+export /*default*/ class jsTPS {
     constructor() {
         // THE TRANSACTION STACK
         this.transactions = [];

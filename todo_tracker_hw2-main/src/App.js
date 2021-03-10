@@ -1,7 +1,9 @@
 // IMPORT ALL THE THINGS NEEDED FROM OTHER JAVASCRIPT SOURCE FILES
 import React, { Component } from 'react';
 import testData from './test/testData.json'
-import jsTPS from './common/jsTPS'
+import {jsTPS} from './common/jsTPS'
+
+import {EditDescription_Transaction} from './transactions/DescriptionTransaction.js'//NOT IMPORTING CORRECTLY
 
 // THESE ARE OUR REACT COMPONENTS
 import Navbar from './components/Navbar'
@@ -109,8 +111,34 @@ class App extends Component {
 
     // WILL THIS WORK? @todo
     let toDoListsString = JSON.stringify(this.state.toDoLists);
-    localStorage.setItem("recent_work", toDoListsString);
+    localStorage.setItem("recent_work", toDoListsString); //toDoLists
   }
+
+  editDescriptionTransaction = (itemID, newVal, oldVal) => {
+    let newTransaction = new EditDescription_Transaction(itemID, newVal, oldVal, this.editDescription);
+    this.tps.addTransaction(newTransaction); //add the transaction to the transaction stack
+  }
+
+  editDescription = (itemID, textToChangeTo) => {
+    this.state.currentList.items[this.getIndexPosition(itemID)].description = textToChangeTo; //change the description of the item
+    this.afterToDoListsChangeComplete();
+  }
+
+  editDueDateTransaction = () =>{
+
+  }
+
+  editStatusTransaction = () => {
+
+  }
+
+  getIndexPosition(itemID){
+    for(let i = 0; i < this.state.currentList.items.length; i++){
+      if(this.state.currentList.items[i].id == itemID)
+        return i;
+    }
+  }
+
 
   render() {
     let items = this.state.currentList.items;
@@ -122,7 +150,12 @@ class App extends Component {
           loadToDoListCallback={this.loadToDoList}
           addNewListCallback={this.addNewList}
         />
-        <Workspace toDoListItems={items} />
+        <Workspace 
+          toDoListItems={items} 
+          editDescriptionCallback={this.editDescriptionTransaction} //callback for editing items
+          editDueDateCallback={this.editDueDateTransaction} //callback for editing items
+          editStatusCallback={this.editStatusTransaction} //callback for editing items
+        />
       </div>
     );
   }
