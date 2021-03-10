@@ -58,8 +58,9 @@
     position:absolute;
     text-align: center;
     height:80%;
-    width:100%;
+    width:80%;
     top: 8%;
+    overflow-y: scroll;
 }
 
 .todo-list-button {
