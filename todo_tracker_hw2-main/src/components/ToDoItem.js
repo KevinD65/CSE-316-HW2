@@ -8,8 +8,9 @@ class ToDoItem extends Component {
     constructor(props) {
         super(props);
         this.state = {
-
-            descriptionClicked: false
+            descriptionClicked: false,
+            dateClicked: false,
+            statusClicked: false
         }
 
         // DISPLAY WHERE WE ARE
@@ -21,7 +22,7 @@ class ToDoItem extends Component {
         console.log("\t\t\tToDoItem " + this.props.toDoListItem.id + " did mount");
     }
 
-    clickDescription = (event) => {
+    clickDescription = () => {
         this.setState({
             descriptionClicked: true //set clickedDescription to true
         })
@@ -40,6 +41,42 @@ class ToDoItem extends Component {
         this.props.EDC(listItem.id, event.target.value, listItem.description)
     }
 
+    clickDate = () =>{
+        this.setState({
+            dateClicked: true //set clickedDescription to true
+        })
+    }
+
+    unClickDate = () => {
+        this.setState({
+            dateClicked: false //reset dateClicked
+        })
+    }
+
+    handleEditDate = (event) => {
+        this.unClickDate();
+        let listItem = this.props.toDoListItem;
+        this.props.EDDC(listItem.id, event.target.value, listItem.due_date);
+    }
+
+    clickStatus = () => {
+        this.setState({
+            statusClicked: true //set statusClicked to true
+        })
+    }
+
+    unClickStatus = () => {
+        this.setState({
+            statusClicked: false //reset statusClicked
+        })
+    }
+
+    handleEditStatus = (event) => {
+        this.unClickStatus();
+        let listItem = this.props.toDoListItem;
+        this.props.ESC(listItem.id, event.target.value, listItem.status);
+    }
+
     render() {
         // DISPLAY WHERE WE ARE
         console.log("\t\t\tToDoItem render");
@@ -51,11 +88,20 @@ class ToDoItem extends Component {
         return (
             <div id={'todo-list-item-' + listItem.id} className='list-item-card'>
                 {this.state.descriptionClicked == false
-                    ? <div className='item-col task-col' onClick = {this.clickDescription} onBlur = {this.unClickDescription}>{listItem.description}</div>
+                    ? <div className='item-col task-col' onClick = {this.clickDescription} /*onBlur = {this.unClickDescription}*/>{listItem.description}</div>//local event handler
                     : <input type = 'text' autoFocus defaultValue = {listItem.description} onBlur = {this.handleEditDescription}/>//local event handler
                 }
-                <div className='item-col due-date-col'>{listItem.due_date}</div>
-                <div className='item-col status-col' className={statusType}>{listItem.status}</div>
+                {this.state.dateClicked == false
+                    ? <div className='item-col due-date-col' onClick = {this.clickDate} /*onBlur = {this.unClickDate}*/>{listItem.due_date}</div>//local event handler
+                    : <input type = 'date' autoFocus defaultValue = {listItem.due_date} onBlur = {this.handleEditDate}/>//local event handler
+                }
+                {this.state.statusClicked == false
+                    ? <div className='item-col status-col' className={statusType} onClick = {this.clickStatus} /*onBlur = {this.unClickStatus}*/>{listItem.status}</div>//local event handler
+                    : <select autoFocus defaultValue = {listItem.status} onBlur = {this.unClickStatus} onChange = {this.handleEditStatus}>
+                        <option value = "Complete">complete</option>
+                        <option value = "Incomplete">incomplete</option>
+                      </select>
+                }
                 <div className='item-col test-4-col'></div>
                 <div className='item-col list-controls-col'>
                     <KeyboardArrowUp className='list-item-control todo-button' />

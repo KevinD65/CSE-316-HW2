@@ -3,7 +3,11 @@ import React, { Component } from 'react';
 import testData from './test/testData.json'
 import {jsTPS} from './common/jsTPS'
 
-import {EditDescription_Transaction} from './transactions/DescriptionTransaction.js'//NOT IMPORTING CORRECTLY
+//IMPORT ALL TRANSACTION CLASSES
+import {EditDescription_Transaction} from './transactions/DescriptionTransaction.js'
+import {EditDate_Transaction} from './transactions/DateTransaction.js'
+import {EditStatus_Transaction} from './transactions/StatusTransaction.js'
+
 
 // THESE ARE OUR REACT COMPONENTS
 import Navbar from './components/Navbar'
@@ -124,12 +128,24 @@ class App extends Component {
     this.afterToDoListsChangeComplete();
   }
 
-  editDueDateTransaction = () =>{
-
+  editDueDateTransaction = (itemID, newVal, oldVal) =>{
+    let newTransaction = new EditDate_Transaction(itemID, newVal, oldVal, this.editDueDate); //change the due_date of the item
+    this.tps.addTransaction(newTransaction); //add the transaction to the transaction stack
   }
 
-  editStatusTransaction = () => {
+  editDueDate = (itemID, dateToChangeTo) => {
+    this.state.currentList.items[this.getIndexPosition(itemID)].due_date = dateToChangeTo; //change the due_date of the item
+    this.afterToDoListsChangeComplete();
+  }
 
+  editStatusTransaction = (itemID, newVal, oldVal) => {
+    let newTransaction = new EditStatus_Transaction(itemID, newVal, oldVal, this.editStatus); //change the status of the item
+    this.tps.addTransaction(newTransaction); //add the transaction to the transaction stack
+  }
+
+  editStatus = (itemID, newStatus) => {
+    this.state.currentList.items[this.getIndexPosition(itemID)].status = newStatus; //change the status of the item
+    this.afterToDoListsChangeComplete();
   }
 
   getIndexPosition(itemID){
