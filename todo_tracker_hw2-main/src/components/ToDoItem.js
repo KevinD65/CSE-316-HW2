@@ -36,9 +36,10 @@ class ToDoItem extends Component {
 
     handleEditDescription = (event) => {
         this.unClickDescription();
-        let listItem = this.props.toDoListItem;
-        //console.log(event.target.value);
-        this.props.EDC(listItem.id, event.target.value, listItem.description)
+        if(this.props.toDoListItem.description !== event.target.value){
+            let listItem = this.props.toDoListItem;
+            this.props.EDC(listItem.id, event.target.value, listItem.description)
+        }
     }
 
     clickDate = () =>{
@@ -55,8 +56,10 @@ class ToDoItem extends Component {
 
     handleEditDate = (event) => {
         this.unClickDate();
-        let listItem = this.props.toDoListItem;
-        this.props.EDDC(listItem.id, event.target.value, listItem.due_date);
+        if(this.props.toDoListItem.due_date !== event.target.value){
+            let listItem = this.props.toDoListItem;
+            this.props.EDDC(listItem.id, event.target.value, listItem.due_date);
+        }
     }
 
     clickStatus = () => {
@@ -73,8 +76,10 @@ class ToDoItem extends Component {
 
     handleEditStatus = (event) => {
         this.unClickStatus();
-        let listItem = this.props.toDoListItem;
-        this.props.ESC(listItem.id, event.target.value, listItem.status);
+        if(this.props.toDoListItem.status !== event.target.value){
+            let listItem = this.props.toDoListItem;
+            this.props.ESC(listItem.id, event.target.value, listItem.status);
+        }
     }
 
     render() {
@@ -98,8 +103,8 @@ class ToDoItem extends Component {
                 {this.state.statusClicked == false
                     ? <div className='item-col status-col' className={statusType} onClick = {this.clickStatus} /*onBlur = {this.unClickStatus}*/>{listItem.status}</div>//local event handler
                     : <select autoFocus defaultValue = {listItem.status} onBlur = {this.unClickStatus} onChange = {this.handleEditStatus}>
-                        <option value = "Complete">complete</option>
-                        <option value = "Incomplete">incomplete</option>
+                        <option value = "complete">complete</option>
+                        <option value = "incomplete">incomplete</option>
                       </select>
                 }
                 <div className='item-col test-4-col'></div>

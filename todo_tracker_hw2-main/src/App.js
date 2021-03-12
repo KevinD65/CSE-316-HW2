@@ -124,7 +124,28 @@ class App extends Component {
   }
 
   editDescription = (itemID, textToChangeTo) => {
-    this.state.currentList.items[this.getIndexPosition(itemID)].description = textToChangeTo; //change the description of the item
+    let editedItem = {
+      description: textToChangeTo,
+      due_date: this.state.currentList.items[this.getIndexPosition(itemID)].due_date,
+      status: this.state.currentList.items[this.getIndexPosition(itemID)].status
+    }
+    let updatedItemList = this.state.currentList.items.filter(updateItem => updateItem.id !== itemID); //filter out the item that needs to be updated
+    updatedItemList.splice(this.getIndexPosition(itemID), 0, editedItem);
+    
+    let editedList = {
+      id: this.state.currentList.id,
+      name: this.state.currentList.name,
+      items: updatedItemList
+    }
+
+    let updateToDoLists = this.state.toDoLists.filter(updateList => updateList.id !== this.state.currentList.id) //filter out the list that needs to be updated
+    updateToDoLists.splice(0, 0, editedList);
+
+    this.setState({
+      toDoLists: updateToDoLists,
+      currentList: editedList
+    })
+    
     this.afterToDoListsChangeComplete();
   }
 
@@ -134,7 +155,29 @@ class App extends Component {
   }
 
   editDueDate = (itemID, dateToChangeTo) => {
-    this.state.currentList.items[this.getIndexPosition(itemID)].due_date = dateToChangeTo; //change the due_date of the item
+    //this.state.currentList.items[this.getIndexPosition(itemID)].due_date = dateToChangeTo; //change the due_date of the item
+    let editedItem = {
+      description: this.state.currentList.items[this.getIndexPosition(itemID)].description,
+      due_date: dateToChangeTo,
+      status: this.state.currentList.items[this.getIndexPosition(itemID)].status
+    }
+    let updatedItemList = this.state.currentList.items.filter(updateItem => updateItem.id !== itemID); //filter out the item that needs to be updated
+    updatedItemList.splice(this.getIndexPosition(itemID), 0, editedItem);
+    
+    let editedList = {
+      id: this.state.currentList.id,
+      name: this.state.currentList.name,
+      items: updatedItemList
+    }
+
+    let updateToDoLists = this.state.toDoLists.filter(updateList => updateList.id !== this.state.currentList.id) //filter out the list that needs to be updated
+    updateToDoLists.splice(0, 0, editedList);
+
+    this.setState({
+      toDoLists: updateToDoLists,
+      currentList: editedList
+    })
+    
     this.afterToDoListsChangeComplete();
   }
 
@@ -144,13 +187,34 @@ class App extends Component {
   }
 
   editStatus = (itemID, newStatus) => {
-    this.state.currentList.items[this.getIndexPosition(itemID)].status = newStatus; //change the status of the item
+    let editedItem = {
+      description: this.state.currentList.items[this.getIndexPosition(itemID)].description,
+      due_date: this.state.currentList.items[this.getIndexPosition(itemID)].due_date,
+      status: newStatus
+    }
+    let updatedItemList = this.state.currentList.items.filter(updateItem => updateItem.id !== itemID); //filter out the item that needs to be updated
+    updatedItemList.splice(this.getIndexPosition(itemID), 0, editedItem);
+    
+    let editedList = {
+      id: this.state.currentList.id,
+      name: this.state.currentList.name,
+      items: updatedItemList
+    }
+
+    let updateToDoLists = this.state.toDoLists.filter(updateList => updateList.id !== this.state.currentList.id) //filter out the list that needs to be updated
+    updateToDoLists.splice(0, 0, editedList);
+
+    this.setState({
+      toDoLists: updateToDoLists,
+      currentList: editedList
+    })
+    
     this.afterToDoListsChangeComplete();
   }
 
   getIndexPosition(itemID){
     for(let i = 0; i < this.state.currentList.items.length; i++){
-      if(this.state.currentList.items[i].id == itemID)
+      if(this.state.currentList.items[i].id === itemID)
         return i;
     }
   }
