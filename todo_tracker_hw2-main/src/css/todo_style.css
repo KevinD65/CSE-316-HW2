@@ -110,3 +110,26 @@
 #add-item-button, #delete-list-button, #close-list-button {
     text-align: center;
 }
+
+.deleteModal {
+    background: rgb(169,169,169, 0.3);
+}
+
+.box {
+    color: white;
+    font-weight: bold;
+    font-size: large;
+    background: rgb(170, 87, 87);
+}
+
+.confirmModal {
+    font-weight: normal;
+    font-size: medium;
+    background: rgb(228, 10, 2);
+  }
+
+.cancelModal {
+    font-weight: normal;
+    font-size: medium;
+    background: #07d111;
+}

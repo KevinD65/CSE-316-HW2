@@ -4,15 +4,18 @@ import testData from './test/testData.json'
 import {jsTPS} from './common/jsTPS'
 
 //IMPORT ALL TRANSACTION CLASSES
+import {AddItem_Transaction} from './transactions/AddItemTransaction.js'
 import {EditDescription_Transaction} from './transactions/DescriptionTransaction.js'
 import {EditDate_Transaction} from './transactions/DateTransaction.js'
 import {EditStatus_Transaction} from './transactions/StatusTransaction.js'
 
 
 // THESE ARE OUR REACT COMPONENTS
+import DeletionModal from './components/DeletionModal'
 import Navbar from './components/Navbar'
 import LeftSidebar from './components/LeftSidebar'
 import Workspace from './components/Workspace'
+import { RemoveItem_Transaction } from './transactions/RemoveItemTransaction';
 {/*import ItemsListHeaderComponent from './components/ItemsListHeaderComponent'
 import ItemsListComponent from './components/ItemsListComponent'
 import ListsComponent from './components/ListsComponent'
@@ -58,13 +61,18 @@ class App extends Component {
       currentList: {items: []},
       nextListId: highListId+1,
       nextListItemId: highListItemId+1,
-      useVerboseFeedback: true
+      useVerboseFeedback: true,
+      deletionModal: false
     }
   }
 
   // WILL LOAD THE SELECTED LIST
   loadToDoList = (toDoList) => {
     console.log("loading " + toDoList);
+
+    if(this.state.currentList !== toDoList){ //if already selected list is clicked, tps doesn't reset
+      this.tps.clearAllTransactions(); //otherwise clear the transaction stack
+    }
 
     // MAKE SURE toDoList IS AT THE TOP OF THE STACK BY REMOVING THEN PREPENDING
     const nextLists = this.state.toDoLists.filter(testList =>
@@ -103,7 +111,7 @@ class App extends Component {
   makeNewToDoListItem = () =>  {
     let newToDoListItem = {
       description: "No Description",
-      dueDate: "none",
+      due_date: "No Date",
       status: "incomplete"
     };
     return newToDoListItem;
@@ -115,7 +123,31 @@ class App extends Component {
 
     // WILL THIS WORK? @todo
     let toDoListsString = JSON.stringify(this.state.toDoLists);
-    localStorage.setItem("recent_work", toDoListsString); //toDoLists
+    localStorage.setItem("toDoLists", toDoListsString); //toDoLists
+  }
+
+  addItemTransaction = (itemID) => {
+    let newTransaction = new AddItem_Transaction(itemID, this.addDefaultItem, this.removeItem);
+    this.tps.addTransaction(newTransaction);
+  }
+
+  addDefaultItem = () => {
+    let newItem = this.makeNewToDoListItem();
+    let updatedItemList = this.state.currentList.items;
+    updatedItemList.splice(this.state.currentList.items.length, 0, newItem); //insert new item at the end of the list
+    let editedList = {
+      id: this.state.currentList.id,
+      name: this.state.currentList.name,
+      items: updatedItemList
+    }
+    let updateToDoLists = this.state.toDoLists.filter(updateList => updateList.id !== this.state.currentList.id) //filter out the list that needs to be updated
+    updateToDoLists.splice(0, 0, editedList);
+    this.setState({
+      toDoLists: updateToDoLists,
+      currentList: editedList
+    })
+    
+    this.afterToDoListsChangeComplete();
   }
 
   editDescriptionTransaction = (itemID, newVal, oldVal) => {
@@ -124,7 +156,9 @@ class App extends Component {
   }
 
   editDescription = (itemID, textToChangeTo) => {
+    console.log(this.state.currentList.items[0]);
     let editedItem = {
+      id: itemID,
       description: textToChangeTo,
       due_date: this.state.currentList.items[this.getIndexPosition(itemID)].due_date,
       status: this.state.currentList.items[this.getIndexPosition(itemID)].status
@@ -155,8 +189,8 @@ class App extends Component {
   }
 
   editDueDate = (itemID, dateToChangeTo) => {
-    //this.state.currentList.items[this.getIndexPosition(itemID)].due_date = dateToChangeTo; //change the due_date of the item
     let editedItem = {
+      id: itemID,
       description: this.state.currentList.items[this.getIndexPosition(itemID)].description,
       due_date: dateToChangeTo,
       status: this.state.currentList.items[this.getIndexPosition(itemID)].status
@@ -188,6 +222,7 @@ class App extends Component {
 
   editStatus = (itemID, newStatus) => {
     let editedItem = {
+      id: itemID,
       description: this.state.currentList.items[this.getIndexPosition(itemID)].description,
       due_date: this.state.currentList.items[this.getIndexPosition(itemID)].due_date,
       status: newStatus
@@ -212,10 +247,76 @@ class App extends Component {
     this.afterToDoListsChangeComplete();
   }
 
+  removeItemTransaction = (itemID) => {
+    let position = this.getIndexPosition(itemID);
+    let item = this.state.currentList.items[position];
+    let newTransaction = new RemoveItem_Transaction(itemID, item, position, this.removeItem, this.addItemBack);
+    this.tps.addTransaction(newTransaction);
+  }
+
+  removeItem = (itemID) => {
+    let editedList = this.state.currentList;
+    editedList.items.splice(this.getIndexPosition(itemID), 1);
+    let updateToDoLists = this.state.toDoLists.filter(updateList => updateList.id !== this.state.currentList.id) //filter out the list that needs to be updated
+    updateToDoLists.splice(0, 0, editedList);
+    this.setState({
+      toDoLists: updateToDoLists,
+      currentList: editedList
+    })
+    this.afterToDoListsChangeComplete();
+    return(this.getIndexPosition(itemID)); //returns the position of the item removed
+  }
+
+  addItemBack = (position, item) => {
+    let editedList = this.state.currentList;
+    editedList.items.splice(position, 0, item);
+    let updateToDoLists = this.state.toDoLists.filter(updateList => updateList.id !== this.state.currentList.id) //filter out the list that needs to be updated
+    updateToDoLists.splice(0, 0, editedList);
+    this.setState({
+      toDoLists: updateToDoLists,
+      currentList: editedList
+    })
+    this.afterToDoListsChangeComplete();
+  }
+
   getIndexPosition(itemID){
     for(let i = 0; i < this.state.currentList.items.length; i++){
       if(this.state.currentList.items[i].id === itemID)
         return i;
+    }
+  }
+
+  toggleDeletionModal = () => {
+    if(this.state.deletionModal == false){
+      this.setState({
+        deletionModal: true
+      })
+    }
+    else{
+      this.setState({
+        deletionModal: false
+      })
+    }
+  }
+
+  deleteList = () =>{
+    let listID = this.state.currentList.id;
+    let updateToDoLists = this.state.toDoLists.filter(removeList => removeList.id !== listID); //filter out the list to remove
+    this.setState({
+      toDoLists: updateToDoLists,
+      currentList: {items: []}
+    })
+  }
+
+  undo = () =>{
+    if(this.tps.hasTransactionToUndo){
+      this.tps.undoTransaction();
+    }
+  }
+
+  redo = () =>{
+    if(this.tps.hasTransactionToRedo){
+      this.tps.doTransaction();
     }
   }
 
@@ -224,6 +325,10 @@ class App extends Component {
     let items = this.state.currentList.items;
     return (
       <div id="root">
+        {this.state.deletionModal == false
+          ? <DeletionModal confirmCallback = {this.deleteList} showModal = {false}/>
+          : <DeletionModal confirmCallback = {this.deleteList} showModal = {true}/>
+        }
         <Navbar />
         <LeftSidebar 
           toDoLists={this.state.toDoLists}
@@ -231,10 +336,15 @@ class App extends Component {
           addNewListCallback={this.addNewList}
         />
         <Workspace 
-          toDoListItems={items} 
+          toDoListItems={items}
+          undoCallback={this.undo} //callback for undo
+          redoCallback={this.redo} //callback for redo
+          addItemCallback={this.addItemTransaction} //callback for add item
           editDescriptionCallback={this.editDescriptionTransaction} //callback for editing items
           editDueDateCallback={this.editDueDateTransaction} //callback for editing items
           editStatusCallback={this.editStatusTransaction} //callback for editing items
+          deleteItemCallback={this.removeItemTransaction} //callback for deleting items
+          trashButtonCallback={this.toggleDeletionModal} //callback for deleting a list
         />
       </div>
     );

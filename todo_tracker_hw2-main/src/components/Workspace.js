@@ -12,6 +12,22 @@ class Workspace extends Component {
         super(props);
     }
 
+    handleUndo = () =>{
+        this.props.undoCallback();
+    }
+
+    handleRedo = () =>{
+        this.props.redoCallback();
+    }
+
+    handleAddItem = () =>{
+        this.props.addItemCallback();
+    }
+
+    handleDelete = () =>{
+        this.props.trashButtonCallback();
+    }
+
     render() {
         return (
             <div id="workspace">
@@ -20,10 +36,10 @@ class Workspace extends Component {
                     <div id="date-col-header" className="item-col todo-button">Due Date</div>
                     <div id="status-col-header" className="item-col todo-button">Status</div>
                     <div className="item-col" display="flex" flexDirection="row" flexWrap="nowrap">
-                        <Undo id="undo-button" className="list-item-control material-icons todo-button" />
-                        <Redo id="redo-button" className="list-item-control material-icons todo-button" />
-                        <AddBox id="add-item-button" className="list-item-control material-icons todo-button" />
-                        <Delete id="delete-list-button" className="list-item-control material-icons todo-button" />
+                        <Undo id="undo-button" className="list-item-control material-icons todo-button" onClick = {this.handleUndo}/>
+                        <Redo id="redo-button" className="list-item-control material-icons todo-button" onClick = {this.handleRedo}/>
+                        <AddBox id="add-item-button" className="list-item-control material-icons todo-button" onClick = {this.handleAddItem}/>
+                        <Delete id="delete-list-button" className="list-item-control material-icons todo-button" onClick = {this.handleDelete}/>
                         <Close id="close-list-button" className="list-item-control material-icons todo-button" />
                     </div>
                 </div>
@@ -36,6 +52,7 @@ class Workspace extends Component {
                             EDC={this.props.editDescriptionCallback} //props from App.js
                             EDDC={this.props.editDueDateCallback}   //props from App.js
                             ESC={this.props.editStatusCallback}    //props from App.js
+                            DI={this.props.deleteItemCallback} //props from App.js
                         />))
                     }
                 </div>

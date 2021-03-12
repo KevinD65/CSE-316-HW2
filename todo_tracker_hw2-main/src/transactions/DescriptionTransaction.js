@@ -15,7 +15,7 @@ export class EditDescription_Transaction extends jsTPS_Transaction {
 
     doTransaction() {
         // edit the text (needs id to identify correct item to alter)
-        this.newValue = this.editDescription(this.id, this.newValue);
+        this.editDescription(this.id, this.newValue);
     }
 
     undoTransaction() {

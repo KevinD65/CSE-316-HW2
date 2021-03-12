@@ -15,7 +15,7 @@ export class EditDate_Transaction extends jsTPS_Transaction {
 
     doTransaction() {
         // edit the date (needs id to identify correct item to alter)
-        this.newValue = this.editDate(this.id, this.newValue);
+        this.editDate(this.id, this.newValue);
     }
 
     undoTransaction() {

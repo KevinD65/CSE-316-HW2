@@ -82,6 +82,10 @@ class ToDoItem extends Component {
         }
     }
 
+    handleDeleteItem = () => {
+        this.props.DI(this.props.toDoListItem.id);
+    }
+
     render() {
         // DISPLAY WHERE WE ARE
         console.log("\t\t\tToDoItem render");
@@ -111,7 +115,7 @@ class ToDoItem extends Component {
                 <div className='item-col list-controls-col'>
                     <KeyboardArrowUp className='list-item-control todo-button' />
                     <KeyboardArrowDown className='list-item-control todo-button' />
-                    <Close className='list-item-control todo-button' />
+                    <Close className='list-item-control todo-button' onClick = {this.handleDeleteItem}/>
                     <div className='list-item-control'></div>
                     <div className='list-item-control'></div>
                 </div>
