@@ -52,7 +52,9 @@ class Workspace extends Component {
                             EDC={this.props.editDescriptionCallback} //props from App.js
                             EDDC={this.props.editDueDateCallback}   //props from App.js
                             ESC={this.props.editStatusCallback}    //props from App.js
-                            DI={this.props.deleteItemCallback} //props from App.js
+                            UI={this.props.upCallback} //props from App.js
+                            DI={this.props.downCallback} //props from App.js
+                            DELI={this.props.deleteItemCallback} //props from App.js
                         />))
                     }
                 </div>

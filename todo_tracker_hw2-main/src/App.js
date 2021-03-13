@@ -8,6 +8,9 @@ import {AddItem_Transaction} from './transactions/AddItemTransaction.js'
 import {EditDescription_Transaction} from './transactions/DescriptionTransaction.js'
 import {EditDate_Transaction} from './transactions/DateTransaction.js'
 import {EditStatus_Transaction} from './transactions/StatusTransaction.js'
+import { RemoveItem_Transaction } from './transactions/RemoveItemTransaction.js';
+import { ItemUp_Transaction } from './transactions/ItemUpTransaction.js';
+import { ItemDown_Transaction } from './transactions/ItemDownTransaction.js';
 
 
 // THESE ARE OUR REACT COMPONENTS
@@ -15,7 +18,6 @@ import DeletionModal from './components/DeletionModal'
 import Navbar from './components/Navbar'
 import LeftSidebar from './components/LeftSidebar'
 import Workspace from './components/Workspace'
-import { RemoveItem_Transaction } from './transactions/RemoveItemTransaction';
 {/*import ItemsListHeaderComponent from './components/ItemsListHeaderComponent'
 import ItemsListComponent from './components/ItemsListComponent'
 import ListsComponent from './components/ListsComponent'
@@ -247,6 +249,58 @@ class App extends Component {
     this.afterToDoListsChangeComplete();
   }
 
+  itemUpTransaction = (itemID) =>{
+    let newTransaction = new ItemUp_Transaction(itemID, this.itemUp, this.itemDown);
+    this.tps.addTransaction(newTransaction);
+  }
+
+  itemUp = (itemID) => {
+    let updatedItemList = this.state.currentList.items.filter(updateItem => updateItem.id !== itemID); //filters out the item to move up
+    updatedItemList.splice(this.getIndexPosition(itemID) - 1, 0, this.state.currentList.items[this.getIndexPosition(itemID)]);
+
+    let editedList = {
+      id: this.state.currentList.id,
+      name: this.state.currentList.name,
+      items: updatedItemList
+    }
+
+    let updateToDoLists = this.state.toDoLists.filter(updateList => updateList.id !== this.state.currentList.id) //filter out the list that needs to be updated
+    updateToDoLists.splice(0, 0, editedList);
+
+    this.setState({
+      toDoLists: updateToDoLists,
+      currentList: editedList
+    })
+
+    this.afterToDoListsChangeComplete();
+  }
+
+  itemDownTransaction = (itemID) => {
+    let newTransaction = new ItemDown_Transaction(itemID, this.itemDown, this.itemUp);
+    this.tps.addTransaction(newTransaction);
+  }
+
+  itemDown = (itemID) => {
+    let updatedItemList = this.state.currentList.items.filter(updateItem => updateItem.id !== itemID); //filters out the item to move up
+    updatedItemList.splice(this.getIndexPosition(itemID) + 1, 0, this.state.currentList.items[this.getIndexPosition(itemID)]);
+
+    let editedList = {
+      id: this.state.currentList.id,
+      name: this.state.currentList.name,
+      items: updatedItemList
+    }
+
+    let updateToDoLists = this.state.toDoLists.filter(updateList => updateList.id !== this.state.currentList.id) //filter out the list that needs to be updated
+    updateToDoLists.splice(0, 0, editedList);
+
+    this.setState({
+      toDoLists: updateToDoLists,
+      currentList: editedList
+    })
+
+    this.afterToDoListsChangeComplete();
+  }
+
   removeItemTransaction = (itemID) => {
     let position = this.getIndexPosition(itemID);
     let item = this.state.currentList.items[position];
@@ -343,6 +397,8 @@ class App extends Component {
           editDescriptionCallback={this.editDescriptionTransaction} //callback for editing items
           editDueDateCallback={this.editDueDateTransaction} //callback for editing items
           editStatusCallback={this.editStatusTransaction} //callback for editing items
+          upCallback={this.itemUpTransaction} //callback for moving item up
+          downCallback={this.itemDownTransaction}  //callback for moving item down
           deleteItemCallback={this.removeItemTransaction} //callback for deleting items
           trashButtonCallback={this.toggleDeletionModal} //callback for deleting a list
         />

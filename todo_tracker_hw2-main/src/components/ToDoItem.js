@@ -82,8 +82,16 @@ class ToDoItem extends Component {
         }
     }
 
-    handleDeleteItem = () => {
+    handleUp = () => {
+        this.props.UI(this.props.toDoListItem.id);
+    }
+
+    handleDown = () => {
         this.props.DI(this.props.toDoListItem.id);
+    }
+
+    handleDeleteItem = () => {
+        this.props.DELI(this.props.toDoListItem.id);
     }
 
     render() {
@@ -113,8 +121,8 @@ class ToDoItem extends Component {
                 }
                 <div className='item-col test-4-col'></div>
                 <div className='item-col list-controls-col'>
-                    <KeyboardArrowUp className='list-item-control todo-button' />
-                    <KeyboardArrowDown className='list-item-control todo-button' />
+                    <KeyboardArrowUp className='list-item-control todo-button' onClick = {this.handleUp}/>
+                    <KeyboardArrowDown className='list-item-control todo-button' onClick = {this.handleDown}/>
                     <Close className='list-item-control todo-button' onClick = {this.handleDeleteItem}/>
                     <div className='list-item-control'></div>
                     <div className='list-item-control'></div>
