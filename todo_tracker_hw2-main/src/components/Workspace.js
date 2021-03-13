@@ -12,20 +12,24 @@ class Workspace extends Component {
         super(props);
     }
 
-    handleUndo = () =>{
+    handleUndo = () => {
         this.props.undoCallback();
     }
 
-    handleRedo = () =>{
+    handleRedo = () => {
         this.props.redoCallback();
     }
 
-    handleAddItem = () =>{
+    handleAddItem = () => {
         this.props.addItemCallback();
     }
 
-    handleDelete = () =>{
+    handleDelete = () => {
         this.props.trashButtonCallback();
+    }
+
+    handleClose = () => {
+        this.props.closeButtonCallback();
     }
 
     render() {
@@ -40,7 +44,7 @@ class Workspace extends Component {
                         <Redo id="redo-button" className="list-item-control material-icons todo-button" onClick = {this.handleRedo}/>
                         <AddBox id="add-item-button" className="list-item-control material-icons todo-button" onClick = {this.handleAddItem}/>
                         <Delete id="delete-list-button" className="list-item-control material-icons todo-button" onClick = {this.handleDelete}/>
-                        <Close id="close-list-button" className="list-item-control material-icons todo-button" />
+                        <Close id="close-list-button" className="list-item-control material-icons todo-button" onClick = {this.handleClose}/>
                     </div>
                 </div>
                 <div id="todo-list-items-div">

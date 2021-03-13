@@ -91,6 +91,10 @@ class App extends Component {
   }
 
   addNewList = () => {
+    if(this.state.currentList == null){
+
+    }
+
     let newToDoListInList = [this.makeNewToDoList()];
     let newToDoListsList = [...newToDoListInList, ...this.state.toDoLists];
     let newToDoList = newToDoListInList[0];
@@ -355,7 +359,7 @@ class App extends Component {
     }
   }
 
-  deleteList = () =>{
+  deleteList = () => {
     let listID = this.state.currentList.id;
     let updateToDoLists = this.state.toDoLists.filter(removeList => removeList.id !== listID); //filter out the list to remove
     this.setState({
@@ -364,7 +368,15 @@ class App extends Component {
       deletionModal: false
     })
   }
-
+  
+  closeList = () => {
+    if(this.getSelected() == true){
+      this.setState({
+        currentList: {items: []}
+      })
+    }
+  }
+  
   undo = () =>{
     if(this.tps.hasTransactionToUndo){
       this.tps.undoTransaction();
@@ -395,7 +407,17 @@ class App extends Component {
     }
   }
 
+  getSelected = () => {
+    for(let i = 0; i < this.state.toDoLists.length; i++){
+      if(this.state.currentList.id == this.state.toDoLists[i].id){
+        return true;
+      }
+    }
+    return false;
+  }
+
   render() {
+    console.log(this.state.currentList);
     let items = this.state.currentList.items;
     return (
       <div id="root" onKeyDown = {this.detectControl} onKeyUp = {this.detectControl}>
@@ -404,7 +426,8 @@ class App extends Component {
           : <DeletionModal confirmCallback = {this.deleteList} toggleCallback = {this.toggleDeletionModal} showModal = {true}/>
         }
         <Navbar />
-        <LeftSidebar 
+        <LeftSidebar
+          selected={this.getSelected} 
           toDoLists={this.state.toDoLists}
           loadToDoListCallback={this.loadToDoList}
           addNewListCallback={this.addNewList}
@@ -421,6 +444,7 @@ class App extends Component {
           downCallback={this.itemDownTransaction}  //callback for moving item down
           deleteItemCallback={this.removeItemTransaction} //callback for deleting items
           trashButtonCallback={this.toggleDeletionModal} //callback for deleting a list
+          closeButtonCallback={this.closeList}
         />
       </div>
     );
