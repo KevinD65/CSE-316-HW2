@@ -57,6 +57,8 @@ class App extends Component {
       }
     };
 
+    var ctrlFunc = [false, false]; //initializes ctrlFunc to array with only false elements
+
     // SETUP OUR APP STATE
     this.state = {
       toDoLists: recentLists,
@@ -358,7 +360,8 @@ class App extends Component {
     let updateToDoLists = this.state.toDoLists.filter(removeList => removeList.id !== listID); //filter out the list to remove
     this.setState({
       toDoLists: updateToDoLists,
-      currentList: {items: []}
+      currentList: {items: []},
+      deletionModal: false
     })
   }
 
@@ -374,14 +377,31 @@ class App extends Component {
     }
   }
 
+  detectControl = (event) => {
+    if(event.keyCode == 17){
+      this.ctrlFunc.splice(0, 1, true);
+    }
+    else{
+      this.ctrlFunc.splice(0, 1, false);
+    }
+  }
+
+  controlZcontrolY = (event) => {
+    if(this.ctrl && event.keyCode == 90){
+      this.undo();
+    }
+    else if(this.ctrl && event.keyCode == 89){
+      this.redo();
+    }
+  }
 
   render() {
     let items = this.state.currentList.items;
     return (
-      <div id="root">
+      <div id="root" onKeyDown = {this.detectControl} onKeyUp = {this.detectControl}>
         {this.state.deletionModal == false
-          ? <DeletionModal confirmCallback = {this.deleteList} showModal = {false}/>
-          : <DeletionModal confirmCallback = {this.deleteList} showModal = {true}/>
+          ? <DeletionModal confirmCallback = {this.deleteList} toggleCallback = {this.toggleDeletionModal} showModal = {false}/>
+          : <DeletionModal confirmCallback = {this.deleteList} toggleCallback = {this.toggleDeletionModal} showModal = {true}/>
         }
         <Navbar />
         <LeftSidebar 
