@@ -140,24 +140,22 @@ class App extends Component {
   }
 
   addDefaultItem = () => {
-    if(this.getSelected() == true){
-      let newItem = this.makeNewToDoListItem();
-      let updatedItemList = this.state.currentList.items;
-      updatedItemList.splice(this.state.currentList.items.length, 0, newItem); //insert new item at the end of the list
-      let editedList = {
-        id: this.state.currentList.id,
-        name: this.state.currentList.name,
-        items: updatedItemList
-      }
-      let updateToDoLists = this.state.toDoLists.filter(updateList => updateList.id !== this.state.currentList.id) //filter out the list that needs to be updated
-      updateToDoLists.splice(0, 0, editedList);
-      this.setState({
-        toDoLists: updateToDoLists,
-        currentList: editedList
-      })
-      
-      this.afterToDoListsChangeComplete();
+    let newItem = this.makeNewToDoListItem();
+    let updatedItemList = this.state.currentList.items;
+    updatedItemList.splice(this.state.currentList.items.length, 0, newItem); //insert new item at the end of the list
+    let editedList = {
+      id: this.state.currentList.id,
+      name: this.state.currentList.name,
+      items: updatedItemList
     }
+    let updateToDoLists = this.state.toDoLists.filter(updateList => updateList.id !== this.state.currentList.id) //filter out the list that needs to be updated
+    updateToDoLists.splice(0, 0, editedList);
+    this.setState({
+      toDoLists: updateToDoLists,
+      currentList: editedList
+    })
+    
+    this.afterToDoListsChangeComplete();
   }
 
   editDescriptionTransaction = (itemID, newVal, oldVal) => {
@@ -309,6 +307,20 @@ class App extends Component {
     this.afterToDoListsChangeComplete();
   }
 
+  isTop = (itemID) => {
+    if(this.getIndexPosition(itemID) == 0){
+      return true;
+    }
+    return false;
+  }
+
+  isBottom = (itemID) => {
+    if(this.getIndexPosition(itemID) == this.state.currentList.items.length - 1){
+      return true;
+    }
+    return false;
+  }
+
   removeItemTransaction = (itemID) => {
     let position = this.getIndexPosition(itemID);
     let item = this.state.currentList.items[position];
@@ -349,39 +361,33 @@ class App extends Component {
   }
 
   toggleDeletionModal = () => {
-    if(this.getSelected() == true){
-      if(this.state.deletionModal == false){
-        this.setState({
-          deletionModal: true
-        })
-      }
-      else{
-        this.setState({
-          deletionModal: false
-        })
-      }
-    }
-  }
-
-  deleteList = () => {
-    if(this.getSelected() == true){
-      this.tps.clearAllTransactions();
-      let listID = this.state.currentList.id;
-      let updateToDoLists = this.state.toDoLists.filter(removeList => removeList.id !== listID); //filter out the list to remove
+    if(this.state.deletionModal == false){
       this.setState({
-        toDoLists: updateToDoLists,
-        currentList: {items: []},
+        deletionModal: true
+      })
+    }
+    else{
+      this.setState({
         deletionModal: false
       })
     }
   }
+
+  deleteList = () => {
+    this.tps.clearAllTransactions();
+    let listID = this.state.currentList.id;
+    let updateToDoLists = this.state.toDoLists.filter(removeList => removeList.id !== listID); //filter out the list to remove
+    this.setState({
+      toDoLists: updateToDoLists,
+      currentList: {items: []},
+      deletionModal: false
+    })
+  }
   
   closeList = () => {
-    if(this.getSelected() == true){
-      this.setState({
-        currentList: {items: []}
-      })
-    }
+    this.setState({
+      currentList: {items: []}
+    })
   }
   
   undo = () =>{
@@ -459,6 +465,8 @@ class App extends Component {
           editStatusCallback={this.editStatusTransaction} //callback for editing items
           upCallback={this.itemUpTransaction} //callback for moving item up
           downCallback={this.itemDownTransaction}  //callback for moving item down
+          isTopCallback={this.isTop}
+          isBottomCallback={this.isBottom}
           deleteItemCallback={this.removeItemTransaction} //callback for deleting items
           trashButtonCallback={this.toggleDeletionModal} //callback for deleting a list
           closeButtonCallback={this.closeList}

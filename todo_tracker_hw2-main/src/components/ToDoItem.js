@@ -94,6 +94,16 @@ class ToDoItem extends Component {
         this.props.DELI(this.props.toDoListItem.id);
     }
 
+    handleIsTop = () => {
+        let listItem = this.props.toDoListItem;
+        return this.props.TOP(listItem.id);
+    }
+
+    handleIsBottom = () => {
+        let listItem = this.props.toDoListItem;
+        return this.props.BOT(listItem.id);
+    }
+
     render() {
         // DISPLAY WHERE WE ARE
         console.log("\t\t\tToDoItem render");
@@ -121,8 +131,14 @@ class ToDoItem extends Component {
                 }
                 <div className='item-col test-4-col'></div>
                 <div className='item-col list-controls-col'>
-                    <KeyboardArrowUp className='list-item-control todo-button' onClick = {this.handleUp}/>
-                    <KeyboardArrowDown className='list-item-control todo-button' onClick = {this.handleDown}/>
+                    {this.handleIsTop() == false
+                        ? <KeyboardArrowUp className='list-item-control todo-button' onClick = {this.handleUp}/>
+                        : <KeyboardArrowUp className='list-item-control todo-button' style = {{color: "grey"}}/>
+                    }
+                    {this.handleIsBottom() == false
+                        ? <KeyboardArrowDown className='list-item-control todo-button' onClick = {this.handleDown}/>
+                        : <KeyboardArrowDown className='list-item-control todo-button' style = {{color: "grey"}}/>
+                    }
                     <Close className='list-item-control todo-button' onClick = {this.handleDeleteItem}/>
                     <div className='list-item-control'></div>
                     <div className='list-item-control'></div>

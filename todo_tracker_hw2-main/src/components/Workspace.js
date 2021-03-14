@@ -54,23 +54,23 @@ class Workspace extends Component {
                     <div className="item-col" display="flex" flexDirection="row" flexWrap="nowrap">
                         {this.handleHasUndo()
                             ? <Undo id="undo-button" className="list-item-control material-icons todo-button" onClick = {this.handleUndo}/>
-                            : <Undo id="undo-button" className="list-item-control material-icons todo-button" style = {{color: "grey"}} onClick = {this.handleUndo}/>
+                            : <Undo id="undo-button" className="list-item-control material-icons todo-button" style = {{color: "grey"}}/>
                         }
                         {this.handleHasRedo()
                             ? <Redo id="redo-button" className="list-item-control material-icons todo-button" onClick = {this.handleRedo}/>
-                            : <Redo id="redo-button" className="list-item-control material-icons todo-button" style = {{color: "grey"}} onClick = {this.handleRedo}/>
+                            : <Redo id="redo-button" className="list-item-control material-icons todo-button" style = {{color: "grey"}}/>
                         }
                         {this.handleSelect()
                             ? <AddBox id="add-item-button" className="list-item-control material-icons todo-button" onClick = {this.handleAddItem}/>
-                            : <AddBox id="add-item-button" className="list-item-control material-icons todo-button" style = {{color: "grey"}} onClick = {this.handleAddItem}/>
+                            : <AddBox id="add-item-button" className="list-item-control material-icons todo-button" style = {{color: "grey"}}/>
                         }   
                         {this.handleSelect()
                             ? <Delete id="delete-list-button" className="list-item-control material-icons todo-button" onClick = {this.handleDelete}/>
-                            : <Delete id="delete-list-button" className="list-item-control material-icons todo-button" style = {{color: "grey"}} onClick = {this.handleDelete}/>
+                            : <Delete id="delete-list-button" className="list-item-control material-icons todo-button" style = {{color: "grey"}}/>
                         }
                         {this.handleSelect()
                             ? <Close id="close-list-button" className="list-item-control material-icons todo-button" onClick = {this.handleClose}/>
-                            : <Close id="close-list-button" className="list-item-control material-icons todo-button" style = {{color: "grey"}} onClick = {this.handleClose}/>
+                            : <Close id="close-list-button" className="list-item-control material-icons todo-button" style = {{color: "grey"}}/>
                         }  
                     </div>
                 </div>
@@ -86,6 +86,8 @@ class Workspace extends Component {
                             UI={this.props.upCallback} //props from App.js
                             DI={this.props.downCallback} //props from App.js
                             DELI={this.props.deleteItemCallback} //props from App.js
+                            TOP={this.props.isTopCallback} //props from App.js
+                            BOT={this.props.isBottomCallback} //props from App.js
                         />))
                     }
                 </div>
