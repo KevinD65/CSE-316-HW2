@@ -41,7 +41,8 @@ class LeftSidebar extends Component {
                         <ListLink
                             key={toDoList.id}
                             toDoList={toDoList}                                // PASS THE LIST TO THE CHILDREN
-                            loadToDoListCallback={this.props.loadToDoListCallback} />  // PASS THE CALLBACK TO THE CHILDREN
+                            loadToDoListCallback={this.props.loadToDoListCallback}  // PASS THE CALLBACK TO THE CHILDREN
+                            SLC={this.props.isSelectedListCallback}/>
                     ))
                 }
                 </div>

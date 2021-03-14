@@ -14,6 +14,10 @@ class ListLink extends Component {
         console.log("\t\t\tListLink " + this.props.toDoList.key + " did mount");
     }
 
+    handleIsSelectedList = () => {
+        return this.props.SLC(this.props.toDoList.id);
+    }
+
     handleLoadList = () => {
         this.props.loadToDoListCallback(this.props.toDoList);
     }
@@ -23,11 +27,11 @@ class ListLink extends Component {
         console.log("\t\t\tListLink render");
 
         return (
-            <div 
-                className='todo-list-button'
-                onClick={this.handleLoadList}
-            >
-                {this.props.toDoList.name}<br />
+            <div>
+            {this.handleIsSelectedList()
+                ? <div className='todo-list-button' onClick={this.handleLoadList} style = {{background: "rgb(255,200,25)"}}>{this.props.toDoList.name}<br /></div>
+                : <div className='todo-list-button' onClick={this.handleLoadList}>{this.props.toDoList.name}<br /></div>
+            }
             </div>
         )
     }

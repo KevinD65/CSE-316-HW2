@@ -90,6 +90,13 @@ class App extends Component {
     });
   }
 
+  isSelectedList = (itemID) => {
+    if(this.state.currentList.id == itemID){
+      return true;
+    }
+    return false;
+  }
+
   addNewList = () => {
     if(this.state.currentList == null){
 
@@ -454,6 +461,7 @@ class App extends Component {
           toDoLists={this.state.toDoLists}
           loadToDoListCallback={this.loadToDoList}
           addNewListCallback={this.addNewList}
+          isSelectedListCallback={this.isSelectedList}
         />
         <Workspace 
           toDoListItems={items}
