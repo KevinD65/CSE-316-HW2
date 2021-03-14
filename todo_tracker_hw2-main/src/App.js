@@ -365,6 +365,7 @@ class App extends Component {
 
   deleteList = () => {
     if(this.getSelected() == true){
+      this.tps.clearAllTransactions();
       let listID = this.state.currentList.id;
       let updateToDoLists = this.state.toDoLists.filter(removeList => removeList.id !== listID); //filter out the list to remove
       this.setState({
@@ -393,6 +394,14 @@ class App extends Component {
     if(this.tps.hasTransactionToRedo){
       this.tps.doTransaction();
     }
+  }
+
+  hasUndo = () => {
+    return this.tps.hasTransactionToUndo();
+  }
+
+  hasRedo = () => {
+    return this.tps.hasTransactionToRedo();
   }
 
 /*
@@ -454,6 +463,8 @@ class App extends Component {
           trashButtonCallback={this.toggleDeletionModal} //callback for deleting a list
           closeButtonCallback={this.closeList}
           selected={this.getSelected}
+          hasUndoCallback={this.hasUndo}
+          hasRedoCallback={this.hasRedo}
         />
       </div>
     );

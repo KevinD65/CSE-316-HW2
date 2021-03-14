@@ -32,6 +32,14 @@ class Workspace extends Component {
         this.props.closeButtonCallback();
     }
 
+    handleHasUndo = () => {
+        return this.props.hasUndoCallback();
+    }
+
+    handleHasRedo = () => {
+        return this.props.hasRedoCallback();
+    }
+
     handleSelect = () => {
         return this.props.selected();
     }
@@ -44,8 +52,14 @@ class Workspace extends Component {
                     <div id="date-col-header" className="item-col todo-button">Due Date</div>
                     <div id="status-col-header" className="item-col todo-button">Status</div>
                     <div className="item-col" display="flex" flexDirection="row" flexWrap="nowrap">
-                        <Undo id="undo-button" className="list-item-control material-icons todo-button" onClick = {this.handleUndo}/>
-                        <Redo id="redo-button" className="list-item-control material-icons todo-button" onClick = {this.handleRedo}/>
+                        {this.handleHasUndo()
+                            ? <Undo id="undo-button" className="list-item-control material-icons todo-button" onClick = {this.handleUndo}/>
+                            : <Undo id="undo-button" className="list-item-control material-icons todo-button" style = {{color: "grey"}} onClick = {this.handleUndo}/>
+                        }
+                        {this.handleHasRedo()
+                            ? <Redo id="redo-button" className="list-item-control material-icons todo-button" onClick = {this.handleRedo}/>
+                            : <Redo id="redo-button" className="list-item-control material-icons todo-button" style = {{color: "grey"}} onClick = {this.handleRedo}/>
+                        }
                         {this.handleSelect()
                             ? <AddBox id="add-item-button" className="list-item-control material-icons todo-button" onClick = {this.handleAddItem}/>
                             : <AddBox id="add-item-button" className="list-item-control material-icons todo-button" style = {{color: "grey"}} onClick = {this.handleAddItem}/>
