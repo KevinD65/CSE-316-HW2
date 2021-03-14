@@ -7,7 +7,7 @@
     --swatch-foundation:    #d9d6cc; /* USED FOR BODY BACKGROUND */
     --swatch-primary:       #40454e; /* DOMINANT COLOR, USED FOR MOST BACKGROUNDS */
     --swatch-complement:    #353a44; /* USED IN CONTRAST BACKGROUND FOR TOOLBARS */
-    --swatch-contrast:      #111111; /* USED IN MOUSE-OVER SELECTION OF LARGE ELEMENTS */
+    --swatch-contrast:      rgba(255,255,255, 0.7); /* USED IN MOUSE-OVER SELECTION OF LARGE ELEMENTS */
     --swatch-accent:        #ffc819; /* USED IN MOUSE-OVER SELECTION OF TEXT AND BORDERS */  
 
     --swatch-text:          #e9edf0; /* USED IN MOUSE-OVER SELECTION OF TEXT AND BORDERS */ 
@@ -87,16 +87,19 @@
 
 .todo-button {
     cursor:pointer;
-    background-color: var(--swatch-complement);
     font-weight: bold;
 }
 
 .todo-button:hover {
-    background-color: var(--swatch-contrast);
+    background-color: rgba(255,255,255, 0.7);
 }
 
 #add-list-button {
     color: var(--swatch-accent);
+}
+
+#add-list-button:hover {
+    background-color: rgba(255,255,255, 0.7);
 }
 
 .status-incomplete {

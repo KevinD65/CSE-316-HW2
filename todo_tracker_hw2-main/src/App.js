@@ -392,6 +392,7 @@ class App extends Component {
   }
   
   closeList = () => {
+    this.tps.clearAllTransactions();
     this.setState({
       currentList: {items: []}
     })

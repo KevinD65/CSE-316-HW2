@@ -27,7 +27,7 @@
     width:13%;
     top:5.5%;
     left:0%;
-    padding-left: 15px;
+    padding-left: 25px;
 }
 
 #workspace {
@@ -71,6 +71,7 @@
 
 .todo-button {
     white-space: nowrap;
+    margin-left: 20px;
 }
 
 #left-sidebar-controls {
@@ -97,18 +98,23 @@
     flex-direction: row;
 }
 
+.list-item-card:hover {
+    background-color: rgb(87, 93, 105);
+}
+
 .item-col {
-    width:25%;
+    width: 40%;
 }
 
 .list-controls-col {
-    /*display: flex;
+    display: flex;
     flex-direction: row; 
-    flex-wrap: nowrap;*/
+    flex-wrap: nowrap;
 }
 
 .list-item-control {
     width: 20%;
+    margin: 25px, 50px, 25px, 50px;
 }
 
 .deleteModal {
@@ -129,14 +135,14 @@
     overflow: auto;
 }
 
-  .confirmModal {
+.confirmModal {
     position: relative;
     display: block;
-  }
+}
 
-  .cancelModal {
+.cancelModal {
     position: relative;
     display: block;
-  }
+}
 
   
