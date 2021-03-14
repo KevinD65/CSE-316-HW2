@@ -140,22 +140,24 @@ class App extends Component {
   }
 
   addDefaultItem = () => {
-    let newItem = this.makeNewToDoListItem();
-    let updatedItemList = this.state.currentList.items;
-    updatedItemList.splice(this.state.currentList.items.length, 0, newItem); //insert new item at the end of the list
-    let editedList = {
-      id: this.state.currentList.id,
-      name: this.state.currentList.name,
-      items: updatedItemList
+    if(this.getSelected() == true){
+      let newItem = this.makeNewToDoListItem();
+      let updatedItemList = this.state.currentList.items;
+      updatedItemList.splice(this.state.currentList.items.length, 0, newItem); //insert new item at the end of the list
+      let editedList = {
+        id: this.state.currentList.id,
+        name: this.state.currentList.name,
+        items: updatedItemList
+      }
+      let updateToDoLists = this.state.toDoLists.filter(updateList => updateList.id !== this.state.currentList.id) //filter out the list that needs to be updated
+      updateToDoLists.splice(0, 0, editedList);
+      this.setState({
+        toDoLists: updateToDoLists,
+        currentList: editedList
+      })
+      
+      this.afterToDoListsChangeComplete();
     }
-    let updateToDoLists = this.state.toDoLists.filter(updateList => updateList.id !== this.state.currentList.id) //filter out the list that needs to be updated
-    updateToDoLists.splice(0, 0, editedList);
-    this.setState({
-      toDoLists: updateToDoLists,
-      currentList: editedList
-    })
-    
-    this.afterToDoListsChangeComplete();
   }
 
   editDescriptionTransaction = (itemID, newVal, oldVal) => {
@@ -347,26 +349,30 @@ class App extends Component {
   }
 
   toggleDeletionModal = () => {
-    if(this.state.deletionModal == false){
-      this.setState({
-        deletionModal: true
-      })
-    }
-    else{
-      this.setState({
-        deletionModal: false
-      })
+    if(this.getSelected() == true){
+      if(this.state.deletionModal == false){
+        this.setState({
+          deletionModal: true
+        })
+      }
+      else{
+        this.setState({
+          deletionModal: false
+        })
+      }
     }
   }
 
   deleteList = () => {
-    let listID = this.state.currentList.id;
-    let updateToDoLists = this.state.toDoLists.filter(removeList => removeList.id !== listID); //filter out the list to remove
-    this.setState({
-      toDoLists: updateToDoLists,
-      currentList: {items: []},
-      deletionModal: false
-    })
+    if(this.getSelected() == true){
+      let listID = this.state.currentList.id;
+      let updateToDoLists = this.state.toDoLists.filter(removeList => removeList.id !== listID); //filter out the list to remove
+      this.setState({
+        toDoLists: updateToDoLists,
+        currentList: {items: []},
+        deletionModal: false
+      })
+    }
   }
   
   closeList = () => {
@@ -389,6 +395,7 @@ class App extends Component {
     }
   }
 
+/*
   detectControl = (event) => {
     if(event.keyCode == 17){
       this.ctrlFunc.splice(0, 1, true);
@@ -406,6 +413,7 @@ class App extends Component {
       this.redo();
     }
   }
+*/
 
   getSelected = () => {
     for(let i = 0; i < this.state.toDoLists.length; i++){
@@ -445,6 +453,7 @@ class App extends Component {
           deleteItemCallback={this.removeItemTransaction} //callback for deleting items
           trashButtonCallback={this.toggleDeletionModal} //callback for deleting a list
           closeButtonCallback={this.closeList}
+          selected={this.getSelected}
         />
       </div>
     );

@@ -32,6 +32,10 @@ class Workspace extends Component {
         this.props.closeButtonCallback();
     }
 
+    handleSelect = () => {
+        return this.props.selected();
+    }
+
     render() {
         return (
             <div id="workspace">
@@ -42,9 +46,18 @@ class Workspace extends Component {
                     <div className="item-col" display="flex" flexDirection="row" flexWrap="nowrap">
                         <Undo id="undo-button" className="list-item-control material-icons todo-button" onClick = {this.handleUndo}/>
                         <Redo id="redo-button" className="list-item-control material-icons todo-button" onClick = {this.handleRedo}/>
-                        <AddBox id="add-item-button" className="list-item-control material-icons todo-button" onClick = {this.handleAddItem}/>
-                        <Delete id="delete-list-button" className="list-item-control material-icons todo-button" onClick = {this.handleDelete}/>
-                        <Close id="close-list-button" className="list-item-control material-icons todo-button" onClick = {this.handleClose}/>
+                        {this.handleSelect()
+                            ? <AddBox id="add-item-button" className="list-item-control material-icons todo-button" onClick = {this.handleAddItem}/>
+                            : <AddBox id="add-item-button" className="list-item-control material-icons todo-button" style = {{color: "grey"}} onClick = {this.handleAddItem}/>
+                        }   
+                        {this.handleSelect()
+                            ? <Delete id="delete-list-button" className="list-item-control material-icons todo-button" onClick = {this.handleDelete}/>
+                            : <Delete id="delete-list-button" className="list-item-control material-icons todo-button" style = {{color: "grey"}} onClick = {this.handleDelete}/>
+                        }
+                        {this.handleSelect()
+                            ? <Close id="close-list-button" className="list-item-control material-icons todo-button" onClick = {this.handleClose}/>
+                            : <Close id="close-list-button" className="list-item-control material-icons todo-button" style = {{color: "grey"}} onClick = {this.handleClose}/>
+                        }  
                     </div>
                 </div>
                 <div id="todo-list-items-div">
