@@ -133,12 +133,12 @@ class App extends Component {
   }
 
   // THIS IS A CALLBACK FUNCTION FOR AFTER AN EDIT TO A LIST
-  afterToDoListsChangeComplete = () => {
+  afterToDoListsChangeComplete = (TDL) => {
     console.log("App updated currentToDoList: " + this.state.currentList);
 
     // WILL THIS WORK? @todo
-    let toDoListsString = JSON.stringify(this.state.toDoLists);
-    localStorage.setItem("toDoLists", toDoListsString); //toDoLists
+    let toDoListsString = JSON.stringify(TDL);
+    localStorage.setItem("recentLists", toDoListsString);
   }
 
   addItemTransaction = (itemID) => {
@@ -195,7 +195,7 @@ class App extends Component {
       currentList: editedList
     })
     
-    this.afterToDoListsChangeComplete();
+    this.afterToDoListsChangeComplete(updateToDoLists);
   }
 
   editDueDateTransaction = (itemID, newVal, oldVal) =>{
@@ -227,7 +227,7 @@ class App extends Component {
       currentList: editedList
     })
     
-    this.afterToDoListsChangeComplete();
+    this.afterToDoListsChangeComplete(updateToDoLists);
   }
 
   editStatusTransaction = (itemID, newVal, oldVal) => {
@@ -259,7 +259,7 @@ class App extends Component {
       currentList: editedList
     })
     
-    this.afterToDoListsChangeComplete();
+    this.afterToDoListsChangeComplete(updateToDoLists);
   }
 
   itemUpTransaction = (itemID) =>{
@@ -285,7 +285,7 @@ class App extends Component {
       currentList: editedList
     })
 
-    this.afterToDoListsChangeComplete();
+    this.afterToDoListsChangeComplete(updateToDoLists);
   }
 
   itemDownTransaction = (itemID) => {
@@ -311,7 +311,7 @@ class App extends Component {
       currentList: editedList
     })
 
-    this.afterToDoListsChangeComplete();
+    this.afterToDoListsChangeComplete(updateToDoLists);
   }
 
   isTop = (itemID) => {
@@ -344,7 +344,7 @@ class App extends Component {
       toDoLists: updateToDoLists,
       currentList: editedList
     })
-    this.afterToDoListsChangeComplete();
+    this.afterToDoListsChangeComplete(updateToDoLists);
     return(this.getIndexPosition(itemID)); //returns the position of the item removed
   }
 
@@ -357,7 +357,7 @@ class App extends Component {
       toDoLists: updateToDoLists,
       currentList: editedList
     })
-    this.afterToDoListsChangeComplete();
+    this.afterToDoListsChangeComplete(updateToDoLists);
   }
 
   getIndexPosition(itemID){
@@ -418,25 +418,14 @@ class App extends Component {
     return this.tps.hasTransactionToRedo();
   }
 
-/*
-  detectControl = (event) => {
-    if(event.keyCode == 17){
-      this.ctrlFunc.splice(0, 1, true);
-    }
-    else{
-      this.ctrlFunc.splice(0, 1, false);
-    }
-  }
-
   controlZcontrolY = (event) => {
-    if(this.ctrl && event.keyCode == 90){
+    if(event.ctrlKey && event.keyCode == 90 && this.hasUndo()){
       this.undo();
     }
-    else if(this.ctrl && event.keyCode == 89){
+    else if(event.ctrlKey && event.keyCode == 89 && this.hasRedo()){
       this.redo();
     }
   }
-*/
 
   getSelected = () => {
     for(let i = 0; i < this.state.toDoLists.length; i++){
@@ -451,7 +440,7 @@ class App extends Component {
     console.log(this.state.currentList);
     let items = this.state.currentList.items;
     return (
-      <div id="root" onKeyDown = {this.detectControl} onKeyUp = {this.detectControl}>
+      <div id="root" onKeyDown = {this.controlZcontrolY} tabIndex = {0}>
         {this.state.deletionModal == false
           ? <DeletionModal confirmCallback = {this.deleteList} toggleCallback = {this.toggleDeletionModal} showModal = {false}/>
           : <DeletionModal confirmCallback = {this.deleteList} toggleCallback = {this.toggleDeletionModal} showModal = {true}/>

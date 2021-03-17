@@ -71,7 +71,7 @@
 
 .todo-button {
     white-space: nowrap;
-    margin-left: 20px;
+    width: 40%;
 }
 
 #left-sidebar-controls {
@@ -103,7 +103,7 @@
 }
 
 .item-col {
-    width: 40%;
+    width:40%;
 }
 
 .list-controls-col {
