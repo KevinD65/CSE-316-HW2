@@ -171,7 +171,6 @@ class App extends Component {
   }
 
   editDescription = (itemID, textToChangeTo) => {
-    console.log(this.state.currentList.items[0]);
     let editedItem = {
       id: itemID,
       description: textToChangeTo,
@@ -436,6 +435,24 @@ class App extends Component {
     return false;
   }
 
+  changeListName = (listID, nameToChangeTo) => {
+    let updatedList = {
+      id: listID,
+      name: nameToChangeTo,
+      items: this.state.currentList.items
+    }
+
+    let updateToDoLists = this.state.toDoLists;
+    updateToDoLists.splice(0, 1, updatedList);
+
+    this.setState({
+      toDoLists: updateToDoLists,
+      currentList: updatedList
+    })
+    this.afterToDoListsChangeComplete(updateToDoLists);
+    console.log(updateToDoLists);
+  }
+
   render() {
     console.log(this.state.currentList);
     let items = this.state.currentList.items;
@@ -452,6 +469,7 @@ class App extends Component {
           loadToDoListCallback={this.loadToDoList}
           addNewListCallback={this.addNewList}
           isSelectedListCallback={this.isSelectedList}
+          listNameChangeCallback={this.changeListName}
         />
         <Workspace 
           toDoListItems={items}
