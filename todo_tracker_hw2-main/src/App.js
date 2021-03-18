@@ -34,6 +34,7 @@ class App extends Component {
     this.tps = new jsTPS();
 
     // CHECK TO SEE IF THERE IS DATA IN LOCAL STORAGE FOR THIS APP
+    //  localStorage.clear();
     let recentLists = localStorage.getItem("recentLists");
     console.log("recentLists: " + recentLists);
     if (!recentLists) {
@@ -56,8 +57,6 @@ class App extends Component {
         highListItemId = toDoListItem.id;
       }
     };
-
-    var ctrlFunc = [false, false]; //initializes ctrlFunc to array with only false elements
 
     // SETUP OUR APP STATE
     this.state = {
@@ -98,12 +97,9 @@ class App extends Component {
   }
 
   addNewList = () => {
-    if(this.state.currentList == null){
-
-    }
-
     let newToDoListInList = [this.makeNewToDoList()];
     let newToDoListsList = [...newToDoListInList, ...this.state.toDoLists];
+    // let newToDoListsList = [...this.state.toDoLists ,...newToDoListInList];
     let newToDoList = newToDoListInList[0];
 
     // AND SET THE STATE, WHICH SHOULD FORCE A render
@@ -111,25 +107,41 @@ class App extends Component {
       toDoLists: newToDoListsList,
       currentList: newToDoList,
       nextListId: this.state.nextListId+1
-    }, this.afterToDoListsChangeComplete);
+    }, this.afterToDoListsChangeComplete(newToDoListsList));
   }
 
   makeNewToDoList = () => {
     let newToDoList = {
-      id: this.highListId,
+      id: this.state.nextListId,//this.highListId,
       name: 'Untitled',
       items: []
     };
+    let updateNextListID = this.state.nextListId + 1;
+    this.setState({
+      nextListId: updateNextListID
+    })
     return newToDoList;
   }
 
   makeNewToDoListItem = () =>  {
     let newToDoListItem = {
+      id: this.state.nextListItemId,
       description: "No Description",
       due_date: "No Date",
       status: "incomplete"
     };
+    let updateNextListItemID = this.state.nextListItemId + 1;
+    this.setState({
+      nextListItemId: updateNextListItemID
+    })
     return newToDoListItem;
+  }
+
+  decrementNextListItemId = () => {
+    let updateNextListItemID = this.state.nextListItemId - 1;
+    this.setState({
+      nextListItemId: updateNextListItemID
+    })
   }
 
   // THIS IS A CALLBACK FUNCTION FOR AFTER AN EDIT TO A LIST
@@ -141,8 +153,8 @@ class App extends Component {
     localStorage.setItem("recentLists", toDoListsString);
   }
 
-  addItemTransaction = (itemID) => {
-    let newTransaction = new AddItem_Transaction(itemID, this.addDefaultItem, this.removeItem);
+  addItemTransaction = () => {
+    let newTransaction = new AddItem_Transaction(this.addDefaultItem, this.removeItem, this.decrementNextListItemId);
     this.tps.addTransaction(newTransaction);
   }
 
@@ -161,8 +173,8 @@ class App extends Component {
       toDoLists: updateToDoLists,
       currentList: editedList
     })
-    
-    this.afterToDoListsChangeComplete();
+    this.afterToDoListsChangeComplete(updateToDoLists);
+    return newItem.id;
   }
 
   editDescriptionTransaction = (itemID, newVal, oldVal) => {
@@ -450,11 +462,9 @@ class App extends Component {
       currentList: updatedList
     })
     this.afterToDoListsChangeComplete(updateToDoLists);
-    console.log(updateToDoLists);
   }
 
   render() {
-    console.log(this.state.currentList);
     let items = this.state.currentList.items;
     return (
       <div id="root" onKeyDown = {this.controlZcontrolY} tabIndex = {0}>
@@ -470,25 +480,25 @@ class App extends Component {
           addNewListCallback={this.addNewList}
           isSelectedListCallback={this.isSelectedList}
           listNameChangeCallback={this.changeListName}
+          undoCallback={this.undo} //callback for undo
+          redoCallback={this.redo} //callback for redo
+          hasUndoCallback={this.hasUndo}
+          hasRedoCallback={this.hasRedo}
         />
         <Workspace 
           toDoListItems={items}
-          undoCallback={this.undo} //callback for undo
-          redoCallback={this.redo} //callback for redo
           addItemCallback={this.addItemTransaction} //callback for add item
           editDescriptionCallback={this.editDescriptionTransaction} //callback for editing items
           editDueDateCallback={this.editDueDateTransaction} //callback for editing items
           editStatusCallback={this.editStatusTransaction} //callback for editing items
           upCallback={this.itemUpTransaction} //callback for moving item up
           downCallback={this.itemDownTransaction}  //callback for moving item down
-          isTopCallback={this.isTop}
+          isTopCallback={this.isTop} //callback for 
           isBottomCallback={this.isBottom}
           deleteItemCallback={this.removeItemTransaction} //callback for deleting items
           trashButtonCallback={this.toggleDeletionModal} //callback for deleting a list
           closeButtonCallback={this.closeList}
           selected={this.getSelected}
-          hasUndoCallback={this.hasUndo}
-          hasRedoCallback={this.hasRedo}
         />
       </div>
     );

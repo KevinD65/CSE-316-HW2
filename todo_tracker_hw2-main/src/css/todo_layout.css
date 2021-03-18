@@ -14,6 +14,7 @@
     height: 5%;
     margin:auto;
     padding-left: 10px;
+    padding-bottom: 5px;
 }
 
 #title-div {
@@ -25,7 +26,7 @@
     position:absolute;
     height:94%;
     width:13%;
-    top:5.5%;
+    top:6.5%;
     left:0%;
     padding-left: 25px;
 }
@@ -34,7 +35,7 @@
     position:absolute;
     height:94%;
     width:85.5%;
-    top:5.5%;
+    top:6.5%;
     left:13%;
     padding-left: 15px;
     padding-right: 25px;
@@ -103,8 +104,20 @@
     background-color: rgb(87, 93, 105);
 }
 
+#add-list-button {
+    margin-right: 10px;
+}
+
 .item-col {
     width:40%;
+}
+
+#task-col-header {
+    width: 38%;
+}
+
+#date-col-header {
+    width: 38%;
 }
 
 .list-controls-col {
@@ -146,4 +159,7 @@
     display: block;
 }
 
+#add-item-button {
+    margin-left: 13%;
+}
   

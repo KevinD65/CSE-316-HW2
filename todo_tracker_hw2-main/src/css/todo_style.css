@@ -133,10 +133,20 @@
     font-weight: normal;
     font-size: medium;
     background: rgb(228, 10, 2);
+    cursor: pointer;
+  }
+
+.confirmModal:hover {
+    background: #8B0000;
   }
 
 .cancelModal {
     font-weight: normal;
     font-size: medium;
     background: #07d111;
+    cursor: pointer;
+}
+
+.cancelModal:hover {
+    background: #228B22;
 }

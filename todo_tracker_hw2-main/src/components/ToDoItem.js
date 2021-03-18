@@ -12,7 +12,6 @@ class ToDoItem extends Component {
             dateClicked: false,
             statusClicked: false
         }
-
         // DISPLAY WHERE WE ARE
         console.log("\t\t\tToDoItem " + this.props.toDoListItem.id + " constructor");
     }
@@ -114,16 +113,16 @@ class ToDoItem extends Component {
 
         return (
             <div id={'todo-list-item-' + listItem.id} className='list-item-card'>
-                {this.state.descriptionClicked == false
-                    ? <div className='item-col task-col' onClick = {this.clickDescription} /*onBlur = {this.unClickDescription}*/>{listItem.description}</div>//local event handler
+                {this.state.descriptionClicked === false
+                    ? <div className='item-col task-col' onClick = {this.clickDescription}>{listItem.description}</div>//local event handler
                     : <input type = 'text' autoFocus defaultValue = {listItem.description} onBlur = {this.handleEditDescription}/>//local event handler
                 }
-                {this.state.dateClicked == false
-                    ? <div className='item-col due-date-col' onClick = {this.clickDate} /*onBlur = {this.unClickDate}*/>{listItem.due_date}</div>//local event handler
-                    : <input type = 'date' autoFocus defaultValue = {listItem.due_date} onBlur = {this.handleEditDate}/>//local event handler
+                {this.state.dateClicked === false
+                    ? <div className='item-col due-date-col' onClick = {this.clickDate}>{listItem.due_date}</div>//local event handler
+                    : <input type = 'date' autoFocus defaultValue = {listItem.due_date} onBlur = {this.unClickDate} onChange = {this.handleEditDate}/>//local event handler
                 }
-                {this.state.statusClicked == false
-                    ? <div className='item-col status-col' className={statusType} onClick = {this.clickStatus} /*onBlur = {this.unClickStatus}*/>{listItem.status}</div>//local event handler
+                {this.state.statusClicked === false
+                    ? <div className='item-col status-col' className={statusType} onClick = {this.clickStatus}>{listItem.status}</div>//local event handler
                     : <select autoFocus defaultValue = {listItem.status} onBlur = {this.unClickStatus} onChange = {this.handleEditStatus}>
                         <option value = "complete">complete</option>
                         <option value = "incomplete">incomplete</option>
@@ -131,11 +130,11 @@ class ToDoItem extends Component {
                 }
                 <div className='item-col test-4-col'></div>
                 <div className='item-col list-controls-col'>
-                    {this.handleIsTop() == false
+                    {this.handleIsTop() === false
                         ? <KeyboardArrowUp className='list-item-control todo-button' onClick = {this.handleUp}/>
                         : <KeyboardArrowUp className='list-item-control todo-button' style = {{color: "grey"}}/>
                     }
-                    {this.handleIsBottom() == false
+                    {this.handleIsBottom() === false
                         ? <KeyboardArrowDown className='list-item-control todo-button' onClick = {this.handleDown}/>
                         : <KeyboardArrowDown className='list-item-control todo-button' style = {{color: "grey"}}/>
                     }

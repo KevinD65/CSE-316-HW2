@@ -1,8 +1,6 @@
 // IMPORT ALL THE THINGS NEEDED FROM OTHER JAVASCRIPT SOURCE FILES
 import React, { Component } from 'react'
 import ToDoItem from './ToDoItem'
-import Undo from '@material-ui/icons/Undo';
-import Redo from '@material-ui/icons/Redo';
 import AddBox from '@material-ui/icons/AddBox';
 import Delete from '@material-ui/icons/Delete';
 import Close from '@material-ui/icons/Close';
@@ -11,15 +9,6 @@ class Workspace extends Component {
     constructor(props) {
         super(props);
     }
-
-    handleUndo = () => {
-        this.props.undoCallback();
-    }
-
-    handleRedo = () => {
-        this.props.redoCallback();
-    }
-
     handleAddItem = () => {
         this.props.addItemCallback();
     }
@@ -31,15 +20,6 @@ class Workspace extends Component {
     handleClose = () => {
         this.props.closeButtonCallback();
     }
-
-    handleHasUndo = () => {
-        return this.props.hasUndoCallback();
-    }
-
-    handleHasRedo = () => {
-        return this.props.hasRedoCallback();
-    }
-
     handleSelect = () => {
         return this.props.selected();
     }
@@ -52,14 +32,6 @@ class Workspace extends Component {
                     <div id="date-col-header" className="item-col todo-button">Due Date</div>
                     <div id="status-col-header" className="item-col todo-button">Status</div>
                     <div className="item-col" display="flex" flexDirection="row" flexWrap="nowrap">
-                        {this.handleHasUndo()
-                            ? <Undo id="undo-button" className="list-item-control material-icons todo-button" onClick = {this.handleUndo}/>
-                            : <Undo id="undo-button" className="list-item-control material-icons todo-button" style = {{color: "grey"}}/>
-                        }
-                        {this.handleHasRedo()
-                            ? <Redo id="redo-button" className="list-item-control material-icons todo-button" onClick = {this.handleRedo}/>
-                            : <Redo id="redo-button" className="list-item-control material-icons todo-button" style = {{color: "grey"}}/>
-                        }
                         {this.handleSelect()
                             ? <AddBox id="add-item-button" className="list-item-control material-icons todo-button" onClick = {this.handleAddItem}/>
                             : <AddBox id="add-item-button" className="list-item-control material-icons todo-button" style = {{color: "grey"}}/>

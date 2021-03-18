@@ -2,6 +2,8 @@
 import React, { Component } from 'react';
 import ListLink from './ListLink'
 import AddBox from '@material-ui/icons/AddBox';
+import Undo from '@material-ui/icons/Undo';
+import Redo from '@material-ui/icons/Redo';
 
 class LeftSidebar extends Component {
     constructor(props) {
@@ -16,6 +18,22 @@ class LeftSidebar extends Component {
         return this.props.selected();
     }
 
+    handleUndo = () => {
+        this.props.undoCallback();
+    }
+
+    handleRedo = () => {
+        this.props.redoCallback();
+    }
+
+    handleHasUndo = () => {
+        return this.props.hasUndoCallback();
+    }
+
+    handleHasRedo = () => {
+        return this.props.hasRedoCallback();
+    }
+
     render() {
         return (
             <div id="left-sidebar">
@@ -26,12 +44,19 @@ class LeftSidebar extends Component {
                         ? <AddBox 
                             id="add-list-button"
                             className="material-icons todo_button"
-                            onClick={this.handleAddNewList} 
                             style = {{color: "grey"}}/>
                         : <AddBox 
                             id="add-list-button"
                             className="material-icons todo_button"
                             onClick={this.handleAddNewList}/>
+                        }
+                        {this.handleHasUndo()
+                            ? <Undo id="undo-button" className="list-item-control material-icons todo-button" onClick = {this.handleUndo}/>
+                            : <Undo id="undo-button" className="list-item-control material-icons todo-button" style = {{color: "grey"}}/>
+                        }
+                        {this.handleHasRedo()
+                            ? <Redo id="redo-button" className="list-item-control material-icons todo-button" onClick = {this.handleRedo}/>
+                            : <Redo id="redo-button" className="list-item-control material-icons todo-button" style = {{color: "grey"}}/>
                         }
                     </span>
                 </div>

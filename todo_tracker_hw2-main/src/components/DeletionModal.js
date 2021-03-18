@@ -1,9 +1,6 @@
 import React, { Component } from 'react'
 
 class DeletionModal extends Component{
-    constructor(props){
-        super(props);
-    }
 
     handleConfirmClick = (event) => {
         this.props.confirmCallback();

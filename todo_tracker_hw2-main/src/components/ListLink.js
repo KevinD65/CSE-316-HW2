@@ -17,7 +17,6 @@ class ListLink extends Component {
     }
 
     doubleClick = () => {
-        console.log("DOUBLECLICK");
         this.setState({
             doubleClicked: true
         })
@@ -39,7 +38,7 @@ class ListLink extends Component {
 
     handleListNameChange = (event) => {
         this.unDoubleClick();
-        if(this.props.toDoList.name != event.target.value){
+        if(this.props.toDoList.name !== event.target.value){
             this.props.HLNC(this.props.toDoList.id, event.target.value);
         }
     }
@@ -54,7 +53,7 @@ class ListLink extends Component {
         let styleColor = this.handleIsSelectedList() ? "highlighted" : "";
         return (
             <div>
-            {this.isDoubleClicked() == false
+            {this.isDoubleClicked() === false
                 ? <div className={'todo-list-button ' + styleColor} onClick={this.handleLoadList} onDoubleClick={this.doubleClick}>{this.props.toDoList.name}<br /></div>
                 : <input type = 'text' autoFocus defaultValue = {this.props.toDoList.name} onBlur = {this.handleListNameChange}/>
             }

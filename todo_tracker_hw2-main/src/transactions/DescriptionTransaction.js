@@ -19,7 +19,7 @@ export class EditDescription_Transaction extends jsTPS_Transaction {
     }
 
     undoTransaction() {
-        //set the text to its previous value (nees id to identify correct item to alter)
+        //set the text to its previous value (needs id to identify correct item to alter)
         this.editDescription(this.id, this.oldValue);
     }
 }
