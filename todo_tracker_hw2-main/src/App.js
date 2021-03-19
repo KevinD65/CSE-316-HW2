@@ -34,7 +34,6 @@ class App extends Component {
     this.tps = new jsTPS();
 
     // CHECK TO SEE IF THERE IS DATA IN LOCAL STORAGE FOR THIS APP
-    //  localStorage.clear();
     let recentLists = localStorage.getItem("recentLists");
     console.log("recentLists: " + recentLists);
     if (!recentLists) {
@@ -87,6 +86,7 @@ class App extends Component {
       toDoLists: nextLists,
       currentList: toDoList
     });
+    this.afterToDoListsChangeComplete(nextLists);
   }
 
   isSelectedList = (itemID) => {
@@ -99,7 +99,6 @@ class App extends Component {
   addNewList = () => {
     let newToDoListInList = [this.makeNewToDoList()];
     let newToDoListsList = [...newToDoListInList, ...this.state.toDoLists];
-    // let newToDoListsList = [...this.state.toDoLists ,...newToDoListInList];
     let newToDoList = newToDoListInList[0];
 
     // AND SET THE STATE, WHICH SHOULD FORCE A render
@@ -112,7 +111,7 @@ class App extends Component {
 
   makeNewToDoList = () => {
     let newToDoList = {
-      id: this.state.nextListId,//this.highListId,
+      id: this.state.nextListId,
       name: 'Untitled',
       items: []
     };
@@ -400,6 +399,7 @@ class App extends Component {
       currentList: {items: []},
       deletionModal: false
     })
+    this.afterToDoListsChangeComplete(updateToDoLists);
   }
   
   closeList = () => {
